@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск фильмов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        input[type="text"], select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 70%;
+            max-width: 400px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .genre-buttons {
+            margin: 20px 0;
+        }
+        .genre-buttons button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .genre-buttons button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li:nth-child(even) {
+            background-color: #f1f1f1;
+        }
+        .not-found {
+            color: #ff6347;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Поиск фильма по названию, году выпуска и жанру</h1>
+
+        
+        <form action="/" method="get">
+            <input type="text" name="search_query" id="search_query" placeholder="Введите название фильма" value="{{ search_query }}">
+            <select name="year" id="year">
+                <option value="">Выберите год</option>
+                {% for year in years %}
+                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Найти</button>
+        </form>
+
+        <div class="genre-buttons">
+            {% for genre in genres %}
+                <form action="/" method="get" style="display:inline;">
+                    <button type="submit" name="genre" value="{{ genre }}">{{ genre }}</button>
+                </form>
+            {% endfor %}
+        </div>
+
+        {% if search_query or selected_genre %}
+            <h2>Результаты поиска:</h2>
+            <ul>
+                {% if films %}
+                    {% for film in films %}
+                        <li>
+                            <span><strong>{{ film.title }}</strong></span>
+                            <span>{{ film.release_year }}</span>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p class="not-found">Фильмы не найдены.</p>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
